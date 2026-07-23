@@ -1159,6 +1159,11 @@
 
     .form-full { margin-bottom: 1rem; }
     .form-disclaimer { font-size: 0.75rem; color: var(--text-light); margin-bottom: 1.5rem; line-height: 1.5; }
+    .required { color: var(--gold); font-weight: 700; }
+    .field-error { font-size: 0.75rem; color: #c0392b; min-height: 1rem; display: block; }
+    .form-group input.invalid,
+    .form-group select.invalid,
+    .form-group textarea.invalid { border-color: #c0392b; }
 
     .btn-submit {
       width: 100%;
@@ -1861,23 +1866,30 @@
           <h3 class="form-title">Enviar mensaje</h3>
           <p class="form-subtitle">Te respondemos en menos de 24 horas en días hábiles.</p>
           <form id="contactForm" novalidate>
+            <input type="hidden" name="access_key" value="740901bf-e8bd-4bd7-bd7e-f2335237606f" />
+            <input type="hidden" name="subject" value="Nuevo contacto desde licalejandroochoa.com" />
+            <input type="hidden" name="from_name" value="Sitio Web Lic. Alejandro Ochoa" />
+            <input type="checkbox" name="botcheck" style="display:none" />
             <div class="form-row">
               <div class="form-group">
-                <label for="fname">Nombre</label>
-                <input type="text" id="fname" name="nombre" placeholder="Tu nombre" />
+                <label for="fname">Nombre <span class="required">*</span></label>
+                <input type="text" id="fname" name="nombre" placeholder="Tu nombre" required minlength="2" />
+                <span class="field-error" id="err-nombre"></span>
               </div>
               <div class="form-group">
-                <label for="fphone">Teléfono</label>
-                <input type="tel" id="fphone" name="telefono" placeholder="477 000 0000" />
+                <label for="fphone">Teléfono <span class="required">*</span></label>
+                <input type="tel" id="fphone" name="telefono" placeholder="477 000 0000" required pattern="[\d\s\(\)\+\-]{7,15}" />
+                <span class="field-error" id="err-telefono"></span>
               </div>
             </div>
             <div class="form-group form-full">
-              <label for="femail">Correo electrónico</label>
-              <input type="email" id="femail" name="email" placeholder="tu@correo.com" />
+              <label for="femail">Correo electrónico <span class="required">*</span></label>
+              <input type="email" id="femail" name="email" placeholder="tu@correo.com" required />
+              <span class="field-error" id="err-email"></span>
             </div>
             <div class="form-group form-full">
-              <label for="fservice">Servicio de interés</label>
-              <select id="fservice" name="servicio">
+              <label for="fservice">Servicio de interés <span class="required">*</span></label>
+              <select id="fservice" name="servicio" required>
                 <option value="">— Selecciona un servicio —</option>
                 <option>Diagnóstico jurídico inmobiliario</option>
                 <option>Regularización de inmuebles</option>
@@ -1887,10 +1899,12 @@
                 <option>Asesoría en operaciones inmobiliarias</option>
                 <option>No sé — quiero orientación</option>
               </select>
+              <span class="field-error" id="err-servicio"></span>
             </div>
             <div class="form-group form-full">
-              <label for="fmessage">Cuéntanos tu caso</label>
-              <textarea id="fmessage" name="mensaje" placeholder="Describe brevemente tu situación..."></textarea>
+              <label for="fmessage">Cuéntanos tu caso <span class="required">*</span></label>
+              <textarea id="fmessage" name="mensaje" placeholder="Describe brevemente tu situación..." required minlength="10"></textarea>
+              <span class="field-error" id="err-mensaje"></span>
             </div>
             <p class="form-disclaimer">La información que compartas es confidencial y solo será utilizada para atender tu consulta.</p>
             <button type="submit" class="btn-submit">Enviar mensaje</button>
@@ -2038,19 +2052,73 @@
     });
 
     /* Formulario (estático — funcionalidad de envío se integra después) */
-    document.getElementById('contactForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const btn = this.querySelector('.btn-submit');
-      btn.textContent = 'Mensaje enviado ✓';
-      btn.style.background = '#2a7a4b';
-      btn.disabled = true;
-      setTimeout(() => {
-        btn.textContent = 'Enviar mensaje';
-        btn.style.background = '';
-        btn.disabled = false;
-        this.reset();
-      }, 4000);
-    });
+    (function() {
+      const rules = {
+        nombre:   { test: v => v.trim().length >= 2,          msg: 'Ingresa tu nombre completo.' },
+        telefono: { test: v => /^[\d\s\(\)\+\-]{7,15}$/.test(v.trim()), msg: 'Ingresa un teléfono válido (mínimo 7 dígitos).' },
+        email:    { test: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()), msg: 'Ingresa un correo electrónico válido.' },
+        servicio: { test: v => v !== '',                      msg: 'Selecciona el servicio de interés.' },
+        mensaje:  { test: v => v.trim().length >= 10,         msg: 'Describe brevemente tu caso (mínimo 10 caracteres).' }
+      };
+
+      function validateField(name, value) {
+        const rule = rules[name];
+        if (!rule) return true;
+        const valid = rule.test(value);
+        const input = document.querySelector('[name="' + name + '"]');
+        const err   = document.getElementById('err-' + name);
+        if (input)  input.classList.toggle('invalid', !valid);
+        if (err)    err.textContent = valid ? '' : rule.msg;
+        return valid;
+      }
+
+      Object.keys(rules).forEach(name => {
+        const el = document.querySelector('[name="' + name + '"]');
+        if (el) el.addEventListener('blur', () => validateField(name, el.value));
+      });
+
+      document.getElementById('contactForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const form = this;
+
+        let allValid = true;
+        Object.keys(rules).forEach(name => {
+          const el = form.querySelector('[name="' + name + '"]');
+          if (el && !validateField(name, el.value)) allValid = false;
+        });
+        if (!allValid) return;
+
+        const btn = form.querySelector('.btn-submit');
+        btn.textContent = 'Enviando…';
+        btn.disabled = true;
+
+        const data = new FormData(form);
+
+        fetch('https://api.web3forms.com/submit', { method: 'POST', body: data })
+          .then(r => r.json())
+          .then(res => {
+            if (res.success) {
+              btn.textContent = 'Mensaje enviado ✓';
+              btn.style.background = '#2a7a4b';
+              form.reset();
+              setTimeout(() => {
+                btn.textContent = 'Enviar mensaje';
+                btn.style.background = '';
+                btn.disabled = false;
+              }, 5000);
+            } else {
+              btn.textContent = 'Error al enviar';
+              btn.style.background = '#c0392b';
+              btn.disabled = false;
+            }
+          })
+          .catch(() => {
+            btn.textContent = 'Error al enviar';
+            btn.style.background = '#c0392b';
+            btn.disabled = false;
+          });
+      });
+    })();
   </script>
 
 </body>
