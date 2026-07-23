@@ -181,6 +181,7 @@
     .delay-3 { transition-delay: 0.3s; }
     .delay-4 { transition-delay: 0.4s; }
     .delay-5 { transition-delay: 0.5s; }
+    .delay-6 { transition-delay: 0.6s; }
 
     /* ===========================
        NAVBAR
@@ -797,6 +798,115 @@
     }
 
     /* ===========================
+       EMPRESAS
+    =========================== */
+    #empresas {
+      background: #111E35;
+      padding: 6rem 0;
+      position: relative;
+      overflow: hidden;
+    }
+    #empresas::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--gold);
+    }
+
+    .empresas-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    .empresas-left .section-label { color: var(--gold); }
+    .empresas-left .gold-line { background: var(--gold); }
+    .empresas-left h2 {
+      font-size: clamp(1.9rem, 3vw, 2.6rem);
+      color: var(--white);
+      margin: 1.5rem 0 1.5rem;
+      line-height: 1.2;
+    }
+    .empresas-left p {
+      color: rgba(255,255,255,0.65);
+      font-size: 0.95rem;
+      line-height: 1.9;
+      margin-bottom: 2rem;
+    }
+    .empresas-cta {
+      display: inline-block;
+      background: var(--gold);
+      color: #111E35;
+      font-weight: 700;
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 1rem 2.5rem;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .empresas-cta:hover { background: #dfc07a; }
+
+    .empresas-right { display: flex; flex-direction: column; gap: 0; }
+
+    .empresa-item {
+      display: grid;
+      grid-template-columns: 2.5rem 1fr;
+      gap: 1.25rem;
+      padding: 1.75rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      align-items: start;
+    }
+    .empresa-item:first-child { border-top: 1px solid rgba(255,255,255,0.08); }
+
+    .empresa-icon {
+      width: 2.5rem;
+      height: 2.5rem;
+      border: 1px solid rgba(201,168,76,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold);
+      font-size: 1rem;
+      flex-shrink: 0;
+      margin-top: 0.15rem;
+    }
+
+    .empresa-text h3 {
+      font-size: 1rem;
+      color: var(--white);
+      font-family: 'Lato', sans-serif;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+      letter-spacing: 0.02em;
+    }
+    .empresa-text p {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.7;
+      margin: 0;
+    }
+
+    .empresas-badge {
+      display: inline-block;
+      background: rgba(201,168,76,0.12);
+      border: 1px solid rgba(201,168,76,0.35);
+      color: var(--gold);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.4rem 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    @media (max-width: 900px) {
+      .empresas-inner { grid-template-columns: 1fr; gap: 3rem; }
+    }
+
+    /* ===========================
        CONSULTA INICIAL
     =========================== */
     #consult { padding: 4rem 0; background: var(--cream); }
@@ -1218,6 +1328,7 @@
         <ul class="nav-links" id="navLinks">
           <li><a href="#about">Acerca de</a></li>
           <li><a href="#services">Servicios</a></li>
+          <li><a href="#empresas">Empresas</a></li>
           <li><a href="#testimonials">Testimonios</a></li>
           <li><a href="#faq">Preguntas Frecuentes</a></li>
           <li><a href="#contact" class="nav-cta">Agendar consulta</a></li>
@@ -1394,6 +1505,69 @@
         </div>
       </div>
 
+    </div>
+  </section>
+
+  <!-- EMPRESAS -->
+  <section id="empresas">
+    <div class="container">
+      <div class="empresas-inner">
+
+        <div class="empresas-left reveal">
+          <span class="empresas-badge">Soluciones corporativas</span>
+          <p class="section-label">Empresas</p>
+          <span class="gold-line"></span>
+          <h2>Asesoría jurídica permanente para su empresa</h2>
+          <p>Las empresas que crecen necesitan un respaldo legal que no llegue solo cuando el problema ya estalló. Con una iguala jurídica, su empresa cuenta con asesoría continua, contratos sólidos y representación cuando se necesite, a un costo predecible y sin sorpresas.</p>
+          <a href="#contact" class="empresas-cta">Solicitar información</a>
+        </div>
+
+        <div class="empresas-right">
+          <div class="empresa-item reveal delay-1">
+            <div class="empresa-icon">&#9670;</div>
+            <div class="empresa-text">
+              <h3>Iguala Jurídica Mensual</h3>
+              <p>Asesoría legal permanente con tiempo de respuesta garantizado. Su despacho jurídico externo, sin el costo de uno interno.</p>
+            </div>
+          </div>
+          <div class="empresa-item reveal delay-2">
+            <div class="empresa-icon">&#9670;</div>
+            <div class="empresa-text">
+              <h3>Elaboración y Revisión de Contratos</h3>
+              <p>Contratos comerciales, de prestación de servicios, confidencialidad y convenios con socios o proveedores, redactados para proteger sus intereses.</p>
+            </div>
+          </div>
+          <div class="empresa-item reveal delay-3">
+            <div class="empresa-icon">&#9670;</div>
+            <div class="empresa-text">
+              <h3>Recuperación de Cartera y Cobranza</h3>
+              <p>Gestión jurídica de cuentas por cobrar vencidas: cartas de requerimiento, negociación y, de ser necesario, acción judicial.</p>
+            </div>
+          </div>
+          <div class="empresa-item reveal delay-4">
+            <div class="empresa-icon">&#9670;</div>
+            <div class="empresa-text">
+              <h3>Procedimientos Judiciales y Administrativos</h3>
+              <p>Representación ante juzgados civiles, mercantiles y autoridades administrativas. Seguimiento puntual en cada etapa del proceso.</p>
+            </div>
+          </div>
+          <div class="empresa-item reveal delay-5">
+            <div class="empresa-icon">&#9670;</div>
+            <div class="empresa-text">
+              <h3>Prevención de Riesgos Legales</h3>
+              <p>Revisión de operaciones, estructuras societarias y prácticas internas para identificar vulnerabilidades antes de que se conviertan en conflictos.</p>
+            </div>
+          </div>
+          <div class="empresa-item reveal delay-6">
+            <div class="empresa-icon">&#9670;</div>
+            <div class="empresa-text">
+              <h3>Representación Jurídica Empresarial</h3>
+              <p>Defensa de los intereses de la empresa frente a terceros, socios, clientes o instituciones, con estrategia y conocimiento del entorno local.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
     </div>
   </section>
 
